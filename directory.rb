@@ -54,6 +54,7 @@ def print_menu
   puts "2. Show the students"
   puts "3. Search for student by first letter"
   puts "4. Search for student by length of name"
+  puts "5. Save the list to students.csv"
   puts "9. Exit"
 end
 
@@ -77,6 +78,8 @@ def process(selection)
     puts "Search for a student by length of their name".center(50)
     length_input = gets.delete!("\n").to_i
     search_by_length(length_input)
+  when "5"
+    save_students
   when "9"
     exit
   else
@@ -88,6 +91,16 @@ end
     students_value = (@students.map {|student| [student[:name]]}).flatten
     result = students_value.select {|student| student.start_with?(search_character)}
     puts result
+  end
+
+  def save_students
+    file = File.open("students.csv", "w")
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end
+    file.close
   end
 
   def search_by_length(search_length)
